@@ -24,12 +24,25 @@ def analyze_pcap(filepath):
         for pkt in packets:
             if ARP in pkt:
                 protocols["ARP"]+=1
-                results = f"Total packets: {total}\n\n"
+                src_ips[pkt[ARP].psrc]+=1
+                dst_ips[pkt[ARP].pdst]+=1
+    
             elif IP in pkt:
+                src_ips[pkt[IP].src]+=1
+                dst_ips[pkt[IP].dst]+=1
                 protocols[protocol_map.get(pkt[IP].proto)]+=1
-                results = f"Total packets: {total}\n\n"
+                
+                
+        results = f"Total packets: {total}\n\n"
+        results+="Top Protocols\n"
         for proto,count in protocols.most_common(5):
             results += f'{proto}: {count}\n'
+        results+= "\nTop Source IPs\n"
+        for src,count in src_ips.most_common(5):
+            results += f'{src}: {count}\n'
+        results+= "\nTop Destination IPs\n"
+        for dst,count in dst_ips.most_common(5):
+            results += f'{dst}: {count}\n'
         return results
     except Exception as e:
             return f"Error reading file: {e}"
