@@ -12,13 +12,37 @@ def analyze_pcap(filepath):
     17: 'UDP',
     41: 'IPv6',
     89: 'OSPF',
-}
+    }
+    
+    application_ports_map = {
+    20: "FTP-DATA",
+    21: "FTP",
+    22: "SSH",
+    23: "Telnet",
+    25: "SMTP",
+    53: "DNS",
+    69: "TFTP",
+    80: "HTTP",
+    110: "POP3",
+    143: "IMAP",
+    161: "SNMP",
+    162: "SNMP-TRAP",
+    443: "HTTPS",
+    465: "SMTPS",
+    587: "SMTP-Submission",
+    993: "IMAPS",
+    995: "POP3S",
+    3306: "MySQL",
+    3389: "RDP"
+    }
+
 
     try:
         
         packets = rdpcap(filepath)
         total = len(packets)
         protocols = Counter()
+        application_ports=Counter()
         src_ports=Counter()
         dst_ports=Counter()
         src_ips = Counter()
@@ -30,34 +54,48 @@ def analyze_pcap(filepath):
                 dst_ips[pkt[ARP].pdst]+=1
     
             elif IP in pkt:
+                proto_num=(pkt[IP].proto)
+               
                 src_ips[pkt[IP].src]+=1
                 dst_ips[pkt[IP].dst]+=1
                 if TCP in pkt:
+                    if pkt[TCP].sport in application_ports_map:
+                        application_ports[application_ports_map.get( pkt[TCP].sport)]+=1
+                    if pkt[TCP].dport in application_ports_map:
+                        application_ports[application_ports_map.get( pkt[TCP].dport)]+=1
                     src_ports[pkt[TCP].sport] += 1
                     dst_ports[pkt[TCP].dport] += 1
                 elif UDP in pkt:
+                    if pkt[UDP].sport in application_ports_map:
+                        application_ports[application_ports_map.get( pkt[UDP].sport)]+=1
+                    if pkt[UDP].dport in application_ports_map:
+                        application_ports[application_ports_map.get( pkt[UDP].dport)]+=1
                     src_ports[pkt[UDP].sport] += 1
                     dst_ports[pkt[UDP].dport] += 1
-                proto_num=(pkt[IP].proto)
+               
                 protocols[protocol_map.get(proto_num,f'Unknown({proto_num})')]+=1
                 
         if packets:
             results = f"Total packets: {total}\n\n"
             results+="Top Protocols\n"
             for proto,count in protocols.most_common(5):
-                results += f'{proto}: {count}\n'
+                results += f'\t{proto}: {count}\n'
             results+= "\nTop Source IPs\n"
             for src,count in src_ips.most_common(5):
-                results += f'{src}: {count}\n'
+                results += f'\t{src}: {count}\n'
             results+= "\nTop Destination IPs\n"
             for dst,count in dst_ips.most_common(5):
-                results += f'{dst}: {count}\n'
+                results += f'\t{dst}: {count}\n'
             results+="\nTop Source Ports\n"
             for srcP,count in src_ports.most_common(5):
-                results+=f'{srcP}: {count}\n'
+                results+=f'\t{srcP}: {count}\n'
             results+="\nTop Destination Ports\n"
             for dstP,count in dst_ports.most_common(5):
-                results+=f'{dstP}: {count}\n'
+                results+=f'\t{dstP}: {count}\n'
+            results+="\nTop Application Ports\n"
+            for ap,count in application_ports.most_common(5):
+                results+=f'\t{ap}: {count}\n'
+            
             return results
         else:
             return "pcap file is empty"
