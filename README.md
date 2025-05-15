@@ -5,7 +5,7 @@ A lightweight, GUI-based Python application for performing basic analysis of `.p
 ---
 
 ## Features
-
+- Can Take 1 or multiple .pcap files as input
 - Analyze `.pcap` files using Scapy
 - Summarizes:
   - Top 5 Protocols (e.g., TCP, UDP, ICMP, ARP)
@@ -14,6 +14,7 @@ A lightweight, GUI-based Python application for performing basic analysis of `.p
   - Top Source Ports
   - Top Destination Ports
   - Top Application-Layer Services (e.g., HTTP, SSH, DNS)
+- Save summaries to text file
 - Simple GUI built with `tkinter`
 - Tabbed output for clean formatting
 
