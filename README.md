@@ -1,4 +1,4 @@
-# Basic PCAP Analyzer
+# PCAP Summary
 
 A lightweight, GUI-based Python application for performing basic analysis of `.pcap` (packet capture) files. This tool summarizes protocol usage, top IPs, ports, and common application-layer traffic like HTTP, DNS, SSH, and more.
 
