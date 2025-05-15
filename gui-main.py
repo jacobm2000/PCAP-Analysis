@@ -77,24 +77,31 @@ def analyze_pcap(filepath):
                 
         if packets:
             results = f"Total packets: {total}\n\n"
+            total_packets=len(packets)
             results+="Top Protocols\n"
             for proto,count in protocols.most_common(5):
-                results += f'\t{proto}: {count}\n'
+                percentage=round((count/ total_packets)*100,2)
+                results += f'\t{proto}: {count} ({percentage}%)\n'
             results+= "\nTop Source IPs\n"
             for src,count in src_ips.most_common(5):
-                results += f'\t{src}: {count}\n'
+                percentage=round((count/ total_packets)*100,2)
+                results += f'\t{src}: {count} ({percentage}%)\n'
             results+= "\nTop Destination IPs\n"
             for dst,count in dst_ips.most_common(5):
-                results += f'\t{dst}: {count}\n'
+                percentage=round((count/ total_packets)*100,2)
+                results += f'\t{dst}: {count} ({percentage}%)\n'
             results+="\nTop Source Ports\n"
             for srcP,count in src_ports.most_common(5):
-                results+=f'\t{srcP}: {count}\n'
+                percentage=round((count/ total_packets)*100,2)
+                results+=f'\t{srcP}: {count} ({percentage}%)\n'
             results+="\nTop Destination Ports\n"
             for dstP,count in dst_ports.most_common(5):
-                results+=f'\t{dstP}: {count}\n'
+                percentage=round((count/ total_packets)*100,2)
+                results+=f'\t{dstP}: {count} ({percentage}%)\n'
             results+="\nTop Application Ports\n"
             for ap,count in application_ports.most_common(5):
-                results+=f'\t{ap}: {count}\n'
+                percentage=round((count/ total_packets)*100,2)
+                results+=f'\t{ap}: {count} ({percentage}%)\n'
             
             return results
         else:
