@@ -41,8 +41,9 @@ def analyze_pcap(filepaths):
     try:
         packets=[]
         for file in filepaths:
-            total=len(packets)
-            initialize_progress(total)
+            packets+=rdpcap(file)
+        total=len(packets)
+        initialize_progress(total)
         protocols = Counter()
         application_ports=Counter()
         src_ports=Counter()
