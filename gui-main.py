@@ -5,7 +5,7 @@ from scapy.all import rdpcap, IP,TCP,UDP,ARP
 from collections import Counter
 
 def analyze_pcap(filepaths):
-    # allows the protocol numbers to map to the proper protocol in which they coorelate with
+    # allows the protocol numbers to map to the proper protocol 
     protocol_map = {
     1: 'ICMP',
     2: 'IGMP',
@@ -14,7 +14,7 @@ def analyze_pcap(filepaths):
     41: 'IPv6',
     89: 'OSPF',
     }
-    
+     # allows port numbers to map to the proper protocol 
     application_ports_map = {
     20: "FTP-DATA",
     21: "FTP",
@@ -40,6 +40,7 @@ def analyze_pcap(filepaths):
 
     try:
         packets=[]
+        #taking in all the packets from each file to then be analyzed 1 by 1
         for file in filepaths:
             packets+=rdpcap(file)
         total=len(packets)
@@ -138,12 +139,15 @@ def save_to_text_file():
                 messagebox.showinfo("Success", "File saved successfully.")
             except Exception as e:
                 messagebox.showerror("Error", f"Failed to save file: {e}")
+                
 def initialize_progress(num_packets): #sets the prograss bar max value so it scales to the number of packets
     progress["maximum"]=num_packets
+    
 def stop_progress():
     progress.stop()   # Stop animation, reset progress
+    
 def step_progress():
-    progress["value"] +=1 # Increment progress by 100 since the step function is called every 100 packets
+    progress["value"] +=1 # Increment progress by 1 for each packet
     root.update_idletasks() # Update the GUI to show progress
 # GUI Setup
 root = tk.Tk()
