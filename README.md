@@ -91,9 +91,3 @@ Top Application Ports
     RDP: 21 (6.42%)
 
 ```
-
-
-
-## License
-
-This project is licensed under the MIT License. You are free to use, modify, and distribute it.
